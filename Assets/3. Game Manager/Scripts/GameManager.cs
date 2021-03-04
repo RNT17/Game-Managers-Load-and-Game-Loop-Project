@@ -66,6 +66,7 @@ public class GameManager : Singleton<GameManager>
 
     void UpdateState(GameState state)
     {
+        Debug.Log("[GameManager] UpdateState");
         GameState previousGameState = _currentGameState;
         _currentGameState = state;
 
@@ -83,7 +84,7 @@ public class GameManager : Singleton<GameManager>
 
         // dispath message
         OnGameStateChanged.Invoke(_currentGameState, previousGameState);
-        
+        Debug.Log(_currentGameState);
         // or transition between scenes
     }
 
@@ -137,6 +138,16 @@ public class GameManager : Singleton<GameManager>
     public void StartGame()
     {
         LoadLevel("Main");    
+    }
+
+    public void PauseGame()
+    {
+        UpdateState(GameState.PAUSE);
+    }
+
+    public void RunningGame()
+    {
+        UpdateState(GameState.RUNNING);
     }
 
 }
