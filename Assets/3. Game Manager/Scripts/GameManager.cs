@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-
-[System.Serializable] public class EventGameState : UnityEvent<GameManager.GameState, GameManager.GameState> {}
 
 public class GameManager : Singleton<GameManager>
 {
@@ -21,7 +18,7 @@ public class GameManager : Singleton<GameManager>
     }
     
     public GameObject[] systemPrefabs;
-    public EventGameState OnGameStateChanged; // Register events
+    public Events.EventGameState OnGameStateChanged; // Register events
 
     private List<GameObject> _instancedSystemPrefabs;
     List<AsyncOperation> _loadOperations;
@@ -42,6 +39,17 @@ public class GameManager : Singleton<GameManager>
         _instancedSystemPrefabs = new List<GameObject>();
 
         InstantiateSystemPrefabs();
+
+        UIManager.Instance.OnMainMenuFadeComplete.AddListener(HandleMainMenuFadeComplete);
+    }
+
+    void Update()
+    {
+        if (_currentGameState == GameState.PREGAME)
+            return; 
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            ToggleMenu();
     }
 
     void OnLoadOperationComplete(AsyncOperation ao)
@@ -59,6 +67,12 @@ public class GameManager : Singleton<GameManager>
         Debug.Log("Load Complete");
     }
 
+    void HandleMainMenuFadeComplete(bool fadeOut)
+    {
+        if (!fadeOut)
+            UnloadLevel(_currentLevelName);
+    }
+
     void OnUnloadOperationComplete(AsyncOperation ao)
     {
         Debug.Log("Unload Complete");
@@ -72,10 +86,13 @@ public class GameManager : Singleton<GameManager>
         switch (_currentGameState)
         {
             case GameState.PREGAME:
+                Time.timeScale = 1.0f;
                 break;
             case GameState.RUNNING:
+                Time.timeScale = 1.0f;
                 break;
             case GameState.PAUSE:
+                Time.timeScale = 0.0f;
                 break;
             default:
                 break;
@@ -83,8 +100,6 @@ public class GameManager : Singleton<GameManager>
 
         // dispath message
         OnGameStateChanged.Invoke(_currentGameState, previousGameState);
-        
-        // or transition between scenes
     }
 
     void InstantiateSystemPrefabs()
@@ -139,6 +154,21 @@ public class GameManager : Singleton<GameManager>
         LoadLevel("Main");    
     }
 
+    public void ToggleMenu()
+    {
+        UpdateState(_currentGameState == GameState.RUNNING ? GameState.PAUSE : GameState.RUNNING);
+    }
+
+    public void RestartGame()
+    {
+        UpdateState(GameManager.GameState.PREGAME);
+    }
+
+    public void QuitGame()
+    {
+        print("Quit");
+        Application.Quit();
+    }
 }
 
 

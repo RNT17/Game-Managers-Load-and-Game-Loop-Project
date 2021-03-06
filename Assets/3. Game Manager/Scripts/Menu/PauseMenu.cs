@@ -1,13 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    // Enter/exit pause state via "escape"
-    // Display Pause Menu when Paused
-    // Exit Pause State via "resume" or "escapa"
-    // Pause simulation on Pause State
-    // Set the cursor to use "Pointer"
+    [SerializeField] private Button ResumeButton;
+    [SerializeField] private Button RestartButton;
+    [SerializeField] private Button QuitButton;
 
+    void Start()
+    {
+        ResumeButton.onClick.AddListener(HandleResumeClicked);
+        RestartButton.onClick.AddListener(HandleRestartClicked);
+        QuitButton.onClick.AddListener(HandleQuitCliked);
+    }
+
+    void HandleResumeClicked()
+    {
+        GameManager.Instance.ToggleMenu();
+    }
+
+    void HandleRestartClicked()
+    {
+        GameManager.Instance.RestartGame();
+    }
+
+    void HandleQuitCliked()
+    {
+        GameManager.Instance.QuitGame();
+    }
 }

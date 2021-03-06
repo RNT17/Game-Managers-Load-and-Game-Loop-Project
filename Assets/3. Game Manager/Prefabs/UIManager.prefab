@@ -49,6 +49,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09a325a7863ea3c4ea46deda7509b3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ResumeButton: {fileID: 114615682490614664}
+  RestartButton: {fileID: 114110037165574424}
+  QuitButton: {fileID: 114161082283702470}
 --- !u!1 &1052357631752932
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,8 +578,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainMenu: {fileID: 7917990290144964309}
-  _dummyCamera: {fileID: 20757272912230474}
   _pauseMenu: {fileID: 7653229078031084526}
+  _dummyCamera: {fileID: 20757272912230474}
 --- !u!1 &1495308988550548
 GameObject:
   m_ObjectHideFlags: 0
